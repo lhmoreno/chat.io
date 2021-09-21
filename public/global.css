@@ -1,0 +1,43 @@
+:root {
+  --background: #2B2B2B;
+  --background-chat: #1F1F1F;
+  --background-message-get: #161616;
+  --background-message-send: #414141;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background-color: var(--background);
+  font-family: 'Roboto', sans-serif;
+  font-size: 18px;
+  height: 100vh;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+input {
+  border: none;
+  outline: none;
+  background-color: var(--background);
+  border: 1px solid white;
+  border-radius: 8px;
+  height: 40px;
+  padding-left: 16px;
+  color: white;
+  font-size: 18px;
+}
+
+button {
+  border: none;
+  outline: none;
+  cursor: pointer;
+  color: white;
+  font-size: 18px;
+}
