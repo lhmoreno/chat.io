@@ -60,4 +60,4 @@ io.on("connection", (socket) => {
 });
 
 // Run Server
-httpServer.listen(3000);
+httpServer.listen(process.env.PORT ? process.env.PORT : 3000);
