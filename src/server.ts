@@ -1,21 +1,23 @@
 import express from "express"
-import path from "path"
+import cookieParser from "cookie-parser"
 import { createServer } from "http"
 import { Server } from "socket.io"
 
-import { db } from "./database"
+import { config } from "./config"
+import { routes } from "./routes"
 
 // Create Server
 const app = express()
-const httpServer = createServer(app);
-const io = new Server(httpServer);
+const httpServer = createServer(app)
+const io = new Server(httpServer)
 
 // Routes
-const pathPublic = path.join(__dirname, "..", "public")
-app.use("/static", express.static(pathPublic))
-app.get("/", (req, res) => res.sendFile(path.join(pathPublic, "login", "index.html")))
-app.get("/chat", (req, res) => res.sendFile(path.join(pathPublic, "chat", "index.html")))
+app.use(express.json())
+app.use(cookieParser())
+app.use("/static", express.static(config.path_public))
+app.use(routes)
 
+/*
 // Chat Socket.io
 io.on("connection", (socket) => {
   const username = socket.handshake.query.name as string
@@ -58,6 +60,7 @@ io.on("connection", (socket) => {
     }
   })
 });
+*/
 
 // Run Server
-httpServer.listen(process.env.PORT ? process.env.PORT : 3000);
+httpServer.listen(process.env.PORT ? process.env.PORT : 3000)
