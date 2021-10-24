@@ -1,5 +1,4 @@
-const params = new URLSearchParams(window.location.search)
-const url_chat = window.location.origin + "/chat"
+const name = new URLSearchParams(window.location.search).get("name")
 
 /*
   Message: {
@@ -13,37 +12,24 @@ const url_chat = window.location.origin + "/chat"
 */
 
 window.onload = async () => {
-  const name = params.get("name")
-
   if (name) {
     const input = document.querySelector("input")
     input.value = name
   }
 
-  // if (user_id) {
-  //   const { status, data } = await axios.post(window.location.origin + "/api/login", { user_id })
-    
-  //   if (status === 200) {
+  const form = document.querySelector("form")
+  form.onsubmit = (event) => {
+    event.preventDefault()
 
-  //   } 
-    
-  //   if (status === 201) {
-  //     localStorage.setItem("user_id", data.user_id)
-  //     localStorage.setItem("messages", JSON.stringify([]))
-  //   }
+    const input = document.querySelector("input")
+    const name = input.value.trim()
 
-  //   // return navigateChat()
-  // } else {
-  //   const input = document.querySelector("input")
-  
-  //   input.onchange = (event) => {
-  //     const name = event.target.value
-    
-  //     // return navigateChat()
-  //   }
-  // }
+    if (name === "") return
+
+    return navigateChat(name)
+  }
 }
 
-function navigateChat() {
-  return window.location.href = url_chat
+function navigateChat(name) {
+  return window.location.href = `${window.location.origin}/chat/?name=${name}`
 }
