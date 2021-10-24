@@ -3,6 +3,9 @@
   --background-chat: #1F1F1F;
   --background-message-get: #161616;
   --background-message-send: #414141;
+  --line: #3D3D3D;
+  --text: #FFFFFF;
+  --description: #C4C4C4;
 }
 
 * {
@@ -16,7 +19,7 @@ body {
   font-family: 'Roboto', sans-serif;
   font-size: 18px;
   height: 100vh;
-  color: white;
+  color: var(--text);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -26,11 +29,11 @@ input {
   border: none;
   outline: none;
   background-color: var(--background);
-  border: 1px solid white;
+  border: 1px solid var(--text);
   border-radius: 8px;
   height: 40px;
   padding-left: 16px;
-  color: white;
+  color: var(--text);
   font-size: 18px;
 }
 
@@ -38,11 +41,11 @@ button {
   border: none;
   outline: none;
   cursor: pointer;
-  color: white;
+  color: var(--text);
   font-size: 18px;
 }
 
-img {
+img.logo {
   position: absolute;
   margin: auto 0;
   bottom: 24px;

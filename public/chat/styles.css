@@ -1,23 +1,41 @@
 .contacts-container {
   width: 200px;
   height: 600px;
-  padding: 16px;
+  overflow-y: scroll;
   border-radius: 24px;
   background-color: var(--background-chat);
 }
 
+.contacts-container::-webkit-scrollbar {
+  display: none;
+}
+
 .contacts-container .contact {
+  height: 56px;
+  width: 100%;
+  padding: 0px 8px 0px 16px;
   background-color: var(--background-chat);
   display: flex;
+  align-items: center;
+}
+
+.contacts-container .contact:hover {
+  background-color: var(--background-message-get);
 }
 
 .contacts-container .contact img {
   margin-right: 8px;
 }
 
+.contacts-container .contact .type {
+  color: var(--description);
+  font-size: 12px;
+  text-align: left;
+}
+
 .contacts-container hr {
   border: 1px solid #3D3D3D;
-  margin: 16px 4px;
+  margin: 0px 8px;
 }
 
 .chat-container {
