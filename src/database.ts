@@ -6,14 +6,16 @@ interface UserSocket {
 }
 
 interface Queue {
-  user_id: string
-  message_queue: {
-    receiver_id: string
-    text: string
-  }[]
+  [user_id: string]: {
+    messages: {
+      sender_id: string
+      text: string
+      date: string
+    }[]
+  }
 }
 
-const users: UserSocket = { "123": { name: "Gideon", socket_id: "456" } }
+const users: UserSocket = { "bot": { name: "Gideon" }, "admin": { name: "Luiz" } }
 const queues: Queue[] = []
 
 export const db = { users, queues }

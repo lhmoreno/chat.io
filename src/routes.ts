@@ -7,6 +7,7 @@ import { db } from "./database"
 
 interface MyRequest extends Request {
   user_id?: string
+  name?: string
 }
 
 const routes = Router()
@@ -14,9 +15,9 @@ const routes = Router()
 // Login Page
 routes.get("/", auth, (req: MyRequest, res) => {
   const user_id = req?.user_id
-  const query_name = req.query?.name
+  const name = req?.name
 
-  if (user_id && !query_name) {
+  if (user_id && !name) {
     const { name } = db.users[user_id]
     
     return res.redirect(`/?name=${name}`)
@@ -26,51 +27,41 @@ routes.get("/", auth, (req: MyRequest, res) => {
 })
 
 // Chat Page
-// routes.get("/chat", auth, (req: MyRequest, res) => {
-//   const wasCreated = req?.wasCreated
-//   console.log(wasCreated)
+routes.get("/chat", auth, (req: MyRequest, res) => {
+  const user_id = req?.user_id
+  const name = req?.name
 
-//   if (wasCreated) {
-//     return res.redirect("/")
-//   } else {
-//     return res.sendFile(path.join(config.path_public, "chat", "index.html"))
-//   }
-// })
+  if (!user_id && !name) return res.redirect("/")
 
-// Login Api
-// routes.post("/api/login", (req, res) => {
-//   const user_id: string | undefined = req.body?.user_id
-//   if (typeof(user_id) !== "string") return res.status(400).json({ error: "user_id it's not string" })
+  if (!user_id && name) {
+    const id = v4()
+    db.users[id] = { name }
+    res.cookie("user_id", id)
+    
+    console.log("USERS:", db.users)
+    return res.redirect("/chat")
+  }
 
-//   const hasUserId = Object.keys(db.users).find((id) => user_id === id)
+  if (user_id && name) {
+    db.users[user_id] = { ...db.users[user_id], name }
+    
+    console.log("USERS:", db.users)
+    return res.redirect("/chat")
+  }
 
-//   if (hasUserId) {
-//     console.log("USERS:", db.users) // LOG
-
-//     return res.status(200).json({ queue: "queue | undefined" })
-//   } else {
-//     const id = v4()
-//     db.users[id] = ""
-//     console.log("USERS:", db.users) // LOG
-
-//     return res.status(201).json({ user_id: id })
-//   }
-// })
+  return res.sendFile(path.join(config.path_public, "chat", "index.html"))
+})
 
 function auth(req: MyRequest, res: Response, next: NextFunction) {
-  const user_id: string | undefined = req.cookies?.user_id
+  const user_id = req.cookies?.user_id
+  const name = req.query?.name
   const id = Object.keys(db.users).find((id) => user_id === id)
 
-  if (id) req.user_id = id
-  console.log("Auth")
+  if (typeof(user_id) === "string") {
+    id ? req.user_id = id : res.clearCookie("user_id")
+  }
 
-  // {
-  //   const id = v4()
-  //   db.users[id] = {}
-  //   res.cookie("user_id", id)
-
-  //   console.log("USERS:", db.users) // LOG
-  // }
+  if (typeof(name) === "string" && name.length <= 12) req.name = name
 
   return next()
 }
