@@ -15,7 +15,7 @@ interface Queue {
   }
 }
 
-const users: UserSocket = { "bot": { name: "Gideon" }, "admin": { name: "Luiz" } }
+const users: UserSocket = { "bot": { name: "Gideon" }, "admin": { name: "Luiz" }, "test": { name: "Test" } }
 const queues: Queue[] = []
 
 export const db = { users, queues }

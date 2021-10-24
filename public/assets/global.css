@@ -45,6 +45,28 @@ button {
   font-size: 18px;
 }
 
+.button-submit {
+  width: 40px;
+  height: 40px;
+  margin-left: 8px;
+  border-radius: 8px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  fill: var(--text);
+  background-color: var(--line);
+  transition: background-color 0.1s;
+}
+
+.button-submit:hover {
+  fill: var(--background);
+  background-color: var(--text);
+}
+
+.button-submit svg {
+  width: 22px;
+}
+
 img.logo {
   position: absolute;
   margin: auto 0;

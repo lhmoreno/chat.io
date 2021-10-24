@@ -19,6 +19,11 @@
   align-items: center;
 }
 
+.contacts-container .contact-active {
+  pointer-events: none;
+  background-color: var(--line);
+}
+
 .contacts-container .contact:hover {
   background-color: var(--background-message-get);
 }
@@ -63,18 +68,61 @@
   display: none;
 }
 
-.chat-container .messages-container div {
+.chat-container .messages-container div.get {
+  display: flex;
+  align-items: center;
+}
+
+.chat-container .messages-container div.send {
+  display: flex;
+  flex-direction: row-reverse;
+  align-items: center;
+  align-self: flex-end;
+}
+
+.chat-container .messages-container p.message {
+  cursor: default;
   padding: 8px 16px;
   border-radius: 16px;
   margin-bottom: 6px;
-  width: auto;
+  min-width: min-content;
+  max-width: 90%;
 }
 
-.chat-container .messages-container .get {
+.chat-container .messages-container p.get {
   background-color: var(--background-message-get);
 }
 
-.chat-container .messages-container .send {
+.chat-container .messages-container p.get:hover + p.hour {
+  display: block;
+}
+
+.chat-container .messages-container p.send {
   background-color: var(--background-message-send);
-  align-self: flex-end;
+}
+
+.chat-container .messages-container p.send:hover + p.hour {
+  display: block;
+}
+
+.chat-container .messages-container div.get p.hour {
+  display: none;
+  margin-left: 8px;
+  color: var(--description);
+  font-size: 12px;
+}
+
+.chat-container .messages-container div.send p.hour {
+  display: none;
+  margin-right: 8px;
+  color: var(--description);
+  font-size: 12px;
+}
+
+.chat-container form {
+  display: flex;
+}
+
+.chat-container form input {
+  width: 100%;
 }
