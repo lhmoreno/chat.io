@@ -1,0 +1,29 @@
+:root {
+  --background: #2B2B2B;
+  --background-box: #1F1F1F;
+  --background-dark: #161616;
+  --background-light: #414141;
+  --background-line: #3D3D3D;
+  --text: #FFFFFF;
+  --text-description: #C4C4C4;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  height: 100vh;
+  background-color: var(--background);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+body, button, input {
+  font-family: 'Roboto', sans-serif;
+  font-size: 18px;
+  letter-spacing: 0.02rem;
+}
