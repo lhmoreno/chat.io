@@ -1,15 +1,16 @@
 import { ChangeEvent, FormEvent, useRef, useState } from 'react'
 
-import { Arrow } from '../../assets/Arrow'
+import { ArrowSVG } from '../../assets/Arrow'
 
 import './styles.css'
 
 interface InputProps {
   placeholder?: string
+  minLenght?: number
   onSubmit?: (name: string) => void
 }
 
-export function Input({ placeholder, onSubmit }: InputProps) {
+export function Input({ placeholder, minLenght, onSubmit }: InputProps) {
   const [canSubmit, setCanSubmit] = useState(false)
   const inputRef = useRef<HTMLInputElement>(null)
 
@@ -22,8 +23,9 @@ export function Input({ placeholder, onSubmit }: InputProps) {
 
   function onChange(event: ChangeEvent<HTMLInputElement>) {
     const name = event.target.value
+    const lenght = minLenght ? minLenght : 3
     
-    if (name.trim().length >= 3) {
+    if (name.trim().length >= lenght) {
       setCanSubmit(true)
     } else {
       setCanSubmit(false)
@@ -46,7 +48,7 @@ export function Input({ placeholder, onSubmit }: InputProps) {
         <button
           type="submit"
         >
-          <Arrow />
+          <ArrowSVG />
         </button>
       )}
 
