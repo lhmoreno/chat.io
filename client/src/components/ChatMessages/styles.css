@@ -1,0 +1,66 @@
+.chat-messages-container {
+  position: relative;
+  height: 100%;
+  width: 100%;
+  max-width: 700px;
+  background-color: var(--background-box);
+  border-radius: 0px 24px 24px 0px;
+  box-shadow: 0px 0px 24px rgb(0, 0, 0, 0.25);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.chat-messages-container > span {
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.chat-messages-container > span svg {
+  width: 360px;
+}
+
+.chat-messages-container > span svg path {
+  fill: rgb(255, 255, 255, 0.5);
+}
+
+.chat-messages-container > span p {
+  margin-top: 24px;
+  font-size: 24px;
+  font-weight: bold;
+  color: rgb(255, 255, 255, 0.5);
+}
+
+.chat-messages-container > span.dark svg path {
+  fill: rgb(255, 255, 255, 0.1);
+}
+
+.chat-messages-container header {
+  margin: 24px 0px;
+  display: flex;
+  justify-content: center;
+}
+
+.chat-messages-container header svg {
+  height: 48px;
+  margin-right: 16px;
+}
+
+.chat-messages-container header div p:first-child {
+  font-weight: bold;
+  font-size: 24px;
+}
+
+.chat-messages-container header div p:last-child {
+  color: var(--text-description);
+}
+
+.chat-messages-container footer {
+  margin: 16px 32px;
+  z-index: 10;
+}

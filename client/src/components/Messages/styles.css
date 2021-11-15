@@ -1,0 +1,60 @@
+.messages-container {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  z-index: 10;
+}
+
+.messages-container .message {
+  max-width: 90%;
+  margin-top: 8px;
+  display: flex;
+  align-items: center;
+}
+
+.messages-container .message:first-child {
+  margin-top: 0px;
+}
+
+.messages-container .message > span {
+  font-size: 12px;
+  color: var(--text-description);
+}
+
+.messages-container .message > div {
+  padding: 6px 16px;
+  border-radius: 4px;
+  box-shadow: 0px 0px 8px rgb(0, 0, 0, 0.25);
+}
+
+.messages-container .message-get {
+  align-self: flex-start;
+  flex-direction: row-reverse;
+}
+
+.messages-container .message-get > div {
+  background-color: var(--background-dark);
+  margin-left: 24px;
+  margin-right: 8px;
+}
+
+.messages-container .message-send {
+  align-self: flex-end;
+}
+
+.messages-container .message-send > div {
+  background-color: var(--background-light);
+  margin-right: 24px;
+  margin-left: 8px;
+}
+
+.messages-container .message-send > div.viewed {
+  margin-right: 8px;
+}
+
+.messages-container .message-send > svg {
+  width: 100%;
+  max-width: 14px;
+  margin-right: 24px;
+}

@@ -6,4 +6,9 @@
 
 .login-container > svg {
   margin-bottom: 24px;
+  width: 240px;
+}
+
+.login-container form {
+  width: 360px;
 }
