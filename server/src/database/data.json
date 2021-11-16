@@ -1,0 +1,30 @@
+{
+  "users": [
+    {
+      "id": 1,
+      "name": "lhmoreno"
+    }
+  ],
+  "contacts": [
+    {
+      "id": 1,
+      "name": "Gideon",
+      "status": "Always Online"
+    },
+    {
+      "id": 2,
+      "name": "Tagram",
+      "status": "Writing..."
+    },
+    {
+      "id": 3,
+      "name": "Poul",
+      "status": "Online"
+    },
+    {
+      "id": 4,
+      "name": "Off",
+      "status": "Offline"
+    }
+  ]
+}
