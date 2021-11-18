@@ -17,8 +17,13 @@ export function Input({ placeholder, minLenght, onSubmit }: InputProps) {
   function onMySubmit(event: FormEvent) {
     event.preventDefault()
     const name = inputRef.current?.value
+    if (!name || !onSubmit) return
 
-    if (name && onSubmit) return name
+    const lenght = minLenght ? minLenght : 3
+    
+    if (name.trim().length < lenght) return
+
+    return onSubmit(name)
   }
 
   function onChange(event: ChangeEvent<HTMLInputElement>) {

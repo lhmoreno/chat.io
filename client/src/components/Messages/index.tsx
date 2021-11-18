@@ -2,131 +2,22 @@ import { ViewedSVG } from '../../assets/Viewed'
 
 import './styles.css'
 
-interface MessageProps {
+export interface Message {
   type: 'GET' | 'SEND'
   text: string
   hour: string
   wasViewed?: boolean
 }
 
-const messagesFake: MessageProps[] = [
-  {
-    type: 'GET',
-    text: 'Hellou',
-    hour: '02:37pm'
-  },
-  {
-    type: 'GET',
-    text: 'Lorem iposun sauod ldkjfbu dufiusd sdojcu sdufohdsdfouhsd osfsdiojsd iosdjfsdn ',
-    hour: '02:37pm'
-  },
-  {
-    type: 'SEND',
-    text: 'Hellou',
-    hour: '02:39pm',
-    wasViewed: true
-  },
-  {
-    type: 'SEND',
-    text: 'Lorem iposun sauod ldkjfbu dufiusd sdojcu sdufohdsdfouhsd osfsdiojsd iosdjfsdn ',
-    hour: '02:40pm',
-    wasViewed: true
-  },
-  {
-    type: 'SEND',
-    text: 'Lorem iposun sauod ldkjfbu dufiusd sdojcu sdufohdsdfouhsd osfsdiojsd iosdjfsdn ',
-    hour: '02:40pm'
-  },
+interface MessagesProps {
+  chat?: Message[]
+}
 
-  {
-    type: 'GET',
-    text: 'Hellou',
-    hour: '02:37pm'
-  },
-  {
-    type: 'GET',
-    text: 'Lorem iposun sauod ldkjfbu dufiusd sdojcu sdufohdsdfouhsd osfsdiojsd iosdjfsdn ',
-    hour: '02:37pm'
-  },
-  {
-    type: 'SEND',
-    text: 'Hellou',
-    hour: '02:39pm',
-    wasViewed: true
-  },
-  {
-    type: 'SEND',
-    text: 'Lorem iposun sauod ldkjfbu dufiusd sdojcu sdufohdsdfouhsd osfsdiojsd iosdjfsdn ',
-    hour: '02:40pm',
-    wasViewed: true
-  },
-  {
-    type: 'SEND',
-    text: 'Lorem iposun sauod ldkjfbu dufiusd sdojcu sdufohdsdfouhsd osfsdiojsd iosdjfsdn ',
-    hour: '02:40pm'
-  },
-  {
-    type: 'GET',
-    text: 'Hellou',
-    hour: '02:37pm'
-  },
-  {
-    type: 'GET',
-    text: 'Lorem iposun sauod ldkjfbu dufiusd sdojcu sdufohdsdfouhsd osfsdiojsd iosdjfsdn ',
-    hour: '02:37pm'
-  },
-  {
-    type: 'SEND',
-    text: 'Hellou',
-    hour: '02:39pm',
-    wasViewed: true
-  },
-  {
-    type: 'SEND',
-    text: 'Lorem iposun sauod ldkjfbu dufiusd sdojcu sdufohdsdfouhsd osfsdiojsd iosdjfsdn ',
-    hour: '02:40pm',
-    wasViewed: true
-  },
-  {
-    type: 'SEND',
-    text: 'Lorem iposun sauod ldkjfbu dufiusd sdojcu sdufohdsdfouhsd osfsdiojsd iosdjfsdn ',
-    hour: '02:40pm'
-  },
-  {
-    type: 'GET',
-    text: 'Hellou',
-    hour: '02:37pm'
-  },
-  {
-    type: 'GET',
-    text: 'Lorem iposun sauod ldkjfbu dufiusd sdojcu sdufohdsdfouhsd osfsdiojsd iosdjfsdn ',
-    hour: '02:37pm'
-  },
-  {
-    type: 'SEND',
-    text: 'Hellou',
-    hour: '02:39pm',
-    wasViewed: true
-  },
-  {
-    type: 'SEND',
-    text: 'Lorem iposun sauod ldkjfbu dufiusd sdojcu sdufohdsdfouhsd osfsdiojsd iosdjfsdn ',
-    hour: '02:40pm',
-    wasViewed: true
-  },
-  {
-    type: 'SEND',
-    text: 'Lorem iposun sauod ldkjfbu dufiusd sdojcu sdufohdsdfouhsd osfsdiojsd iosdjfsdn ',
-    hour: '02:40pm'
-  }
-]
-
-export function Messages() {
-
+export function Messages({ chat }: MessagesProps) {
   return (
     <div className="messages-container">
-      { messagesFake.map(({ type, text, hour, wasViewed }, index) => (
-          <Message 
+      { chat && chat.map(({ type, text, hour, wasViewed }, index) => (
+          <Box 
             key={String(index)}
             type={type}
             text={text}
@@ -139,7 +30,7 @@ export function Messages() {
   )
 }
 
-function Message({ type, text, hour, wasViewed }: MessageProps) {
+function Box({ type, text, hour, wasViewed }: Message) {
   return (
     <div className={type === 'GET' ? "message message-get" : "message message-send"}>
       <span>{ hour }</span>

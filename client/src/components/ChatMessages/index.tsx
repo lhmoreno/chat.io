@@ -1,42 +1,45 @@
+import { Fragment } from 'react'
+
 import { LogoSVG } from  '../../assets/Logo'
 import { BotSVG } from  '../../assets/Bot'
 import { PeopleSVG } from  '../../assets/People'
 import { Input } from  '../Input'
-import { Messages } from  '../Messages'
+import { Message, Messages } from  '../Messages'
 
 import './styles.css'
-import { Fragment } from 'react'
 
-interface ChatMessagesProps {
-  contact?: {
-    id: string
-    name: string
-    status: 'Offline' | 'Online' | 'Writing...' | 'Always Online'
-    isBot?: boolean
-  }
-  messages?: []
+export interface ContactActive {
+  id: string
+  name: string
+  status: 'Offline' | 'Online' | 'Writing...' | 'Always Online'
+  isBot?: boolean
 }
 
-export function ChatMessages({ contact, messages }: ChatMessagesProps) {
+interface ChatMessagesProps {
+  contactActive?: ContactActive
+  messages?: Message[]
+}
+
+export function ChatMessages({ contactActive, messages }: ChatMessagesProps) {
   return (
     <div className="chat-messages-container">
-      <span className={contact && messages ? 'dark' : undefined}>
+      <span className={contactActive && messages && messages.length > 0 ? 'dark' : undefined}>
         <LogoSVG />
-        { !contact && !messages && <p>Start a chat with someone</p> }
-        { contact && !messages && <p>Send the first message of the conversation!</p> }
+        { !contactActive && <p>Start a chat with someone</p> }
+        { contactActive && messages?.length === 0 && <p>Send the first message of the conversation!</p> }
       </span>
 
-      { contact && (
+      { contactActive && (
           <Fragment>
             <header>
-              { contact.isBot ? <BotSVG /> : <PeopleSVG/> }
+              { contactActive.isBot ? <BotSVG /> : <PeopleSVG/> }
               <div>
-                <p>{ contact.name }</p>
-                <p>{ contact.status }</p>
+                <p>{ contactActive.name }</p>
+                <p>{ contactActive.status }</p>
               </div>
             </header>
       
-            <Messages />
+            <Messages chat={messages} />
       
             <footer>
               <Input 
