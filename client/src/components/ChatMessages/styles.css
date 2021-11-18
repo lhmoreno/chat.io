@@ -1,7 +1,7 @@
 .chat-messages-container {
   position: relative;
   height: 100%;
-  width: 100%;
+  min-width: 700px;
   max-width: 700px;
   background-color: var(--background-box);
   border-radius: 0px 24px 24px 0px;
