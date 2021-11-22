@@ -1,10 +1,9 @@
 import { io } from 'socket.io-client'
 
-export function createClientSocket(user_id: string) {
+export function createClientSocket() {
   const client = io('http://localhost:3333', {
     auth: {
-      // token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNSIsImlhdCI6MTYzNzE1OTM0OX0.3TPvbihEvIbaGGzyxr_IiOur575kkgaXaSpAZ6jNvyM'
-      user_id
+      token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNSIsImlhdCI6MTYzNzE1OTM0OX0.3TPvbihEvIbaGGzyxr_IiOur575kkgaXaSpAZ6jNvyM'
     }
   })
 
@@ -18,8 +17,4 @@ export function createClientSocket(user_id: string) {
       console.log('Not authorized!')
     }
   })
-
-  if (user_id === '5') {
-    client.emit('SEND_MESSAGE', { user_id: '1', text: 'Hello' })
-  }
 }

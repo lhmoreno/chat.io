@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import axios from 'axios'
 
 import { Input } from '../../components/Input'
 import { LogoSVG } from '../../assets/Logo'
@@ -18,8 +19,10 @@ export function Login() {
     return setIsLoading(false)
   }, [navigate])
 
-  function onSubmit(name: string) {
-    console.log(name)
+  async function onSubmit(name: string) {
+    const res = await axios.post(`http://localhost:3333/sigin?name=${name}`)
+
+    localStorage.setItem('token', res.data.token)
 
     return navigate('/chat')
   }

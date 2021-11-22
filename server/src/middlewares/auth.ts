@@ -15,7 +15,6 @@ export const auth = {
     if (!jwt) return res.status(401).json({ message: 'Login to continue' })
 
     const token = jwt.split(' ')[1]
-
     try {
       const payload = verify(token, '123')
       if (!isUserToken(payload)) return res.status(401).json({ message: 'Login to continue' })
@@ -28,15 +27,14 @@ export const auth = {
   },
 
   async io(socket: Socket, next: NextFn) {
-    // const { token } = socket.handshake.auth
-    // if (!token) return socket.disconnect()
+    const { token } = socket.handshake.auth
+    if (!token) return socket.disconnect()
 
     try {
-      // const payload = verify(token, '123')
-      // if (!isUserToken(payload)) return socket.disconnect()
+      const payload = verify(token, '123')
+      if (!isUserToken(payload)) return socket.disconnect()
 
-      // socket.handshake.user_id = payload.user_id
-      socket.handshake.user_id = socket.handshake.auth.user_id // Trash
+      socket.handshake.user_id = payload.user_id
       next()
     } catch (err) {
       return socket.disconnect()

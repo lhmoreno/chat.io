@@ -1,5 +1,7 @@
 import { useEffect, useState } from 'react'
-// import { useNavigate } from 'react-router-dom'
+import axios from 'axios'
+import { io } from 'socket.io-client'
+import { useNavigate } from 'react-router-dom'
 
 import { Message } from '../../components/Messages'
 import { User, Contacts } from '../../components/Contacts'
@@ -7,29 +9,11 @@ import { ChatMessages } from '../../components/ChatMessages'
 
 import './styles.css'
 
-const contactsFake: User[] = [
-  {
-    id: '1',
-    name: 'Gideon',
-    status: 'Always Online',
-    isBot: true
-  },
-  {
-    id: '2',
-    name: 'Tagram',
-    status: 'Online'
-  },
-  {
-    id: '3',
-    name: 'Poul',
-    status: 'Writing...'
-  },
-  {
-    id: '4',
-    name: 'off',
-    status: 'Offline'
-  }
-]
+interface MessageServer {
+  user_id: string
+  text: string
+  hour: string
+}
 
 const messagesFake: Message[] = [
   {
@@ -140,14 +124,34 @@ export function Chat() {
   const [contactActive, setContactActive] = useState<User>()
   const [chatActive, setChatActive] = useState<Message[]>()
   const [contactsList, setContactsList] = useState<User[]>([])
-  // const navigate = useNavigate()
+  const navigate = useNavigate()
 
   useEffect(() => {
-    // const token = localStorage.getItem('token')
-    // if (!token) return navigate('/')
+    const token = localStorage.getItem('token')
+    if (!token) return navigate('/')
     
-    setContactsList(contactsFake)
-    return setIsLoading(false)
+    login()
+
+    async function login() {
+      try {
+        const { data } = await axios.get('http://localhost:3333/login', {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        })
+
+        setContactsList(data.contacts)
+
+        const socket = io('http://localhost:3333', {
+          auth: { token }
+        })
+
+        setIsLoading(false)
+      } catch (err) {
+        localStorage.removeItem('token')
+        navigate('/')
+      }
+    }
   }, [])
 
   function onChangeContact(user_id: string) {
