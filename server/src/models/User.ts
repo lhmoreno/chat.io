@@ -1,14 +1,15 @@
 import { Schema, model } from 'mongoose'
 
-export interface UserModelProps {
-  name: string
-}
-
-const UserSchema = new Schema<UserModelProps>({
+const UserSchema = new Schema<User>({
   name: {
     type: String,
     required: true
+  },
+
+  isBot: {
+    type: Boolean,
+    required: false
   }
 })
 
-export const UserModel = model<UserModelProps>('User', UserSchema)
+export const UserModel = model<User>('User', UserSchema)

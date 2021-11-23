@@ -7,7 +7,6 @@ declare global {
     }
   }
 }
-
 declare module 'socket.io/dist/socket' {
   export interface Handshake {
     user_id?: string

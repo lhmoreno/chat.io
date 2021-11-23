@@ -1,28 +1,47 @@
-import { ServiceError } from '../@types'
-
 import { sign } from 'jsonwebtoken'
 
 import { UserRepository } from '../repositories/UserRepository'
 
-async function createUserAndToken(name: string) {
+async function createUser(name: string) {
   try {
-    const user = await UserRepository.createUser(name)
-    const token = sign({ user_id: user._id }, '123')
-
-    return token
+    return await UserRepository.createUser(name)
   } catch (err) {
-    throw { status: 500, message: 'Internal server error' } as ServiceError
+    throw { 
+      status: 500, 
+      error: 'Internal server error', 
+      message_server: '!! Error creating user !!'
+    } as ServiceError
   }
 }
 
-async function findAllUsersBut(user_id: string) {
+async function createToken(user_id: IdMongo) {
   try {
-    const users = await UserRepository.findAllUsersBut(user_id)
-
-    return users
+    return sign({ user_id }, '123')
   } catch (err) {
-    throw { status: 500, message: 'Internal server error' } as ServiceError
+    throw { 
+      status: 500, 
+      error: 'Internal server error', 
+      message_server: '!! Error creating token !!'
+    } as ServiceError
   }
 }
 
-export const UserService = { createUserAndToken, findAllUsersBut }
+async function findAllUsersBut(user_id: IdMongo) {
+  try {
+    const documents = await UserRepository.findAllUsersBut(user_id)
+
+    return documents.map((document) => ({
+      id: document.id,
+      name: document.name,
+      isBot: document.isBot
+    }) as User)
+  } catch (err) {
+    throw { 
+      status: 500, 
+      error: 'Internal server error',
+      message_server: '!! Error fetching contacts !!'
+    } as ServiceError
+  }
+}
+
+export const UserService = { createUser, createToken, findAllUsersBut }

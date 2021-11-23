@@ -1,35 +1,16 @@
-import { ChatModelProps, MessageModelProps, ChatModel } from '../models/Chat'
+import { ChatModel } from '../models/Chat'
 
-export interface CreateChatProps {
-  users: ChatModelProps['users']
-  message: MessageModelProps
+async function createChat(users: Chat['users']) {
+  const document = await ChatModel.create({ users, messages: [] })
+  return document.id as IdMongo
 }
 
-export interface UpdateChatProps {
-  chat_id: string
-  newChat: ChatModelProps
+async function updateChat(chat_id: IdMongo, newChat: Chat) {
+  return await ChatModel.findOneAndUpdate({ id: chat_id }, newChat).lean()
 }
 
-async function createChat({ users, message }: CreateChatProps) {
-  const document = await ChatModel.create({ users, messages: [message] })
-
-  const chat = document.toObject()
-
-  return chat
-}
-
-async function updateChat({ chat_id, newChat }: UpdateChatProps) {
-  const chat = await ChatModel.findOneAndUpdate({ id: chat_id }, newChat).lean()
-  if (!chat) return null
-
-  return chat
-}
-
-async function findChat(users: ChatModelProps['users']) {
-  const chat = await ChatModel.findOne({ users })
-  if (!chat) return null
-
-  return chat
+async function findChat(chat_id: IdMongo) {
+  return await ChatModel.findOne({ id: chat_id }).lean()
 }
 
 export const ChatRepository = { createChat, updateChat, findChat }

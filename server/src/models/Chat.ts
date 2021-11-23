@@ -1,19 +1,9 @@
 import { Schema, model } from 'mongoose'
 
-export interface MessageModelProps {
-  user_id: string
-  text: string
-  hour: string
-}
-
-export interface ChatModelProps {
-  users: [string, string]
-  messages: MessageModelProps[]
-}
-
-const MessageSchema = new Schema<MessageModelProps>({
+const MessageSchema = new Schema<Message>({
   user_id: {
-    type: String,
+    type: Schema.Types.ObjectId,
+    ref: 'User',
     required: true
   },
 
@@ -25,13 +15,21 @@ const MessageSchema = new Schema<MessageModelProps>({
   hour: {
     type: String,
     required: true
+  },
+
+  status: {
+    type: String,
+    enum: MessageStatus,
+    required: true
   }
 })
 
-const ChatSchema = new Schema<ChatModelProps>({
+const ChatSchema = new Schema<Chat>({
   users: {
-    type: [String, String],
-    required: true
+    type: [Schema.Types.ObjectId, Schema.Types.ObjectId],
+    ref: 'User',
+    required: true,
+    unique: true
   },
 
   messages: {
@@ -40,4 +38,4 @@ const ChatSchema = new Schema<ChatModelProps>({
   }
 })
 
-export const ChatModel = model<ChatModelProps>('Chat', ChatSchema)
+export const ChatModel = model<Chat>('Chat', ChatSchema)
