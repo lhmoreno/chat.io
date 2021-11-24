@@ -76,4 +76,16 @@ async function findUserIdByToken(token: string) {
   } as ServiceError
 }
 
-export const UserService = { createUser, createToken, findUser, findUserIdByToken }
+async function findAllUsersBut(user_id: string) {
+  try {
+    return await UserRepository.findAllUsersBut(user_id)
+  } catch (err) {
+    throw { 
+      status: 500, 
+      error: 'Internal server error', 
+      message_server: 'ERROR: Service find all users but'
+    } as ServiceError
+  }
+}
+
+export const UserService = { createUser, createToken, findUser, findUserIdByToken, findAllUsersBut }

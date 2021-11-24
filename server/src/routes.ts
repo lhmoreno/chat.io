@@ -7,6 +7,7 @@ const routes = Router()
 // My routes
 routes.post('/user', UserController.createSession)
 routes.get('/user', UserController.showUser)
+routes.get('/contacts', UserController.indexContacts)
 
 // Bad request
 routes.use((req, res) => {

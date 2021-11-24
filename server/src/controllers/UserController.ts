@@ -51,4 +51,28 @@ async function showUser(req: Request, res: Response) {
   }
 }
 
-export const UserController = { createSession, showUser }
+async function indexContacts(req: Request, res: Response) {
+  const token = req.headers.authorization
+
+  // Validators
+  if (typeof(token) !== 'string') return res.status(401).json({ error: 'Token is a requirement' })
+
+  try {
+    // Services
+    const user_id = await UserService.findUserIdByToken(token.split(' ')[1])
+    const users_db = await UserService.findAllUsersBut(user_id)
+
+    const contacts = UserView.renderMany(users_db)
+
+    return res.status(200).json({ contacts })
+  } catch (err) {
+    if (utils.isServiceError(err)) {
+      err.message_server && console.log(err.message_server)
+      return res.status(err.status).json({ error: err.error })
+    }
+    
+    return res.status(500).json({ error: 'Internal server error' })
+  }
+}
+
+export const UserController = { createSession, showUser, indexContacts }

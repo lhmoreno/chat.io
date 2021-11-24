@@ -2,8 +2,14 @@ import { User } from '../..'
 
 function render(user: User) {
   return {
-    name: user.name
+    id: user._id,
+    name: user.name,
+    isBot: user.isBot
   }
 }
 
-export const UserView = { render }
+function renderMany(users: User[]) {
+  return users.map((user) => render(user))
+}
+
+export const UserView = { render, renderMany }
