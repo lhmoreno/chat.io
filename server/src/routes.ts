@@ -6,6 +6,7 @@ const routes = Router()
 
 // My routes
 routes.post('/user', UserController.createSession)
+routes.get('/user', UserController.showUser)
 
 // Bad request
 routes.use((req, res) => {

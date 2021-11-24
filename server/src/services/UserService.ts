@@ -1,6 +1,7 @@
-import { sign } from 'jsonwebtoken'
+import { sign, verify } from 'jsonwebtoken'
 
 import { UserRepository } from '../repositories/UserRepository'
+import { utils } from '../validators/utils'
 
 import { ServiceError } from '../..'
 
@@ -30,4 +31,49 @@ async function createToken(user_id: string) {
   }
 }
 
-export const UserService = { createUser, createToken }
+async function findUser(user_id: string) {
+  try {
+    const user = await UserRepository.findUser(user_id)
+
+    if (user) return user
+  } catch (err) {
+    throw { 
+      status: 500, 
+      error: 'Internal server error', 
+      message_server: 'ERROR: Service create token'
+    } as ServiceError
+  }
+
+  throw { 
+    status: 400, 
+    error: 'Invalid user'
+  } as ServiceError
+}
+
+async function findUserIdByToken(token: string) {
+  try {
+    const decode = verify(token, APP_SECRET)
+
+    if (utils.isJwtPayload(decode)) return decode.user_id
+  } catch (err) {
+    if (utils.isJsonWebTokenError(err)) {
+      throw { 
+        status: 401, 
+        error: 'Invalid token'
+      } as ServiceError
+    }
+
+    throw { 
+      status: 500, 
+      error: 'Internal server error', 
+      message_server: 'ERROR: Service find user_id by token'
+    } as ServiceError
+  }
+
+  throw { 
+    status: 401, 
+    error: 'Invalid token'
+  } as ServiceError
+}
+
+export const UserService = { createUser, createToken, findUser, findUserIdByToken }

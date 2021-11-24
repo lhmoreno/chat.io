@@ -1,3 +1,5 @@
+import { JwtPayload as Payload } from 'jsonwebtoken'
+
 declare global {
   namespace NodeJS {
     interface ProcessEnv {
@@ -14,9 +16,10 @@ declare global {
 
 // Database
 export interface User {
-  id: string
+  _id: string
   name: string
   isBot?: boolean
+  __v: number
 }
 
 // Service
@@ -24,4 +27,8 @@ export interface ServiceError {
   status: number, 
   error: string, 
   message_server?: string
+}
+
+export interface JwtPayload extends Payload {
+  user_id: string
 }

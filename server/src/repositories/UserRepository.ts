@@ -6,4 +6,8 @@ async function createUser(name: string) {
   return document.toObject()
 }
 
-export const UserRepository = { createUser }
+async function findUser(user_id: string) {
+  return await UserModel.findOne({ _id: user_id }).lean()
+}
+
+export const UserRepository = { createUser, findUser }
