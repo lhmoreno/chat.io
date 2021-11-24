@@ -27,6 +27,33 @@ async function createSession(req: Request, res: Response) {
   }
 }
 
+async function editUser(req: Request, res: Response) {
+  const token = req.headers.authorization
+  const { name } = req.body
+
+  // Validators
+  if (typeof(token) !== 'string') return res.status(401).json({ error: 'Token is a requirement' })
+  if (typeof(name) !== 'string') return res.status(400).json({ error: 'Invalid name' })
+  if (name.length > 10) return res.status(400).json({ error: 'Name maximum length 10 characters' })
+
+  try {
+    // Services
+    const user_id = await UserService.findUserIdByToken(token.split(' ')[1])
+    const newUser = await UserService.updateNameUser(user_id, name)
+
+    const user = UserView.render(newUser)
+
+    return res.status(200).json({ user })
+  } catch (err) {
+    if (utils.isServiceError(err)) {
+      err.message_server && console.log(err.message_server)
+      return res.status(err.status).json({ error: err.error })
+    }
+    
+    return res.status(500).json({ error: 'Internal server error' })
+  }
+}
+
 async function showUser(req: Request, res: Response) {
   const token = req.headers.authorization
 
@@ -75,4 +102,4 @@ async function indexContacts(req: Request, res: Response) {
   }
 }
 
-export const UserController = { createSession, showUser, indexContacts }
+export const UserController = { createSession, editUser, showUser, indexContacts }
