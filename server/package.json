@@ -1,23 +1,21 @@
 {
   "name": "chat.io-server",
   "version": "1.0.0",
-  "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "dev": "tsnd src",
-    "docker:up": "docker-compose up -d"
+    "dev": "tsnd -r dotenv/config src dotenv_config_path=.dev.env"
   },
   "dependencies": {
-    "@types/express": "^4.17.13",
-    "@types/jsonwebtoken": "^8.5.6",
-    "@types/node": "^16.11.7",
-    "cors": "^2.8.5",
+    "dotenv": "^10.0.0",
     "express": "^4.17.1",
     "jsonwebtoken": "^8.5.1",
-    "mongoose": "^6.0.13",
-    "socket.io": "^4.3.2",
-    "socket.io-client": "^4.3.2",
+    "mongoose": "^6.0.13"
+  },
+  "devDependencies": {
+    "@types/express": "^4.17.13",
+    "@types/jsonwebtoken": "^8.5.6",
+    "@types/node": "^16.11.9",
     "ts-node-dev": "^1.1.8",
-    "typescript": "^4.4.4"
+    "typescript": "^4.5.2"
   }
 }
