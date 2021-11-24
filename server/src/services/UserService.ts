@@ -3,13 +3,17 @@ import { sign, verify } from 'jsonwebtoken'
 import { UserRepository } from '../repositories/UserRepository'
 import { utils } from '../validators/utils'
 
-import { ServiceError } from '../..'
+import { ServiceError, User } from '../..'
 
 const { APP_SECRET } = process.env
 
 async function createUser(name: string) {
   try {
-    return await UserRepository.createUser(name)
+    const user = await UserRepository.createUser(name)
+    const _id = user._id as string
+    const __v = user.__v as number
+
+    return { _id, name, __v } as User
   } catch (err) {
     throw { 
       status: 500, 

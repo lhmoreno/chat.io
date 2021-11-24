@@ -13,8 +13,8 @@ async function createSession(req: Request, res: Response) {
 
   try {
     // Services
-    const user = await UserService.createUser(name)
-    const token = await UserService.createToken(user._id)
+    const { _id } = await UserService.createUser(name)
+    const token = await UserService.createToken(_id)
 
     return res.status(201).json({ token })
   } catch (err) {
