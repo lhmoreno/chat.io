@@ -2,6 +2,10 @@ import { sign } from 'jsonwebtoken'
 
 import { UserRepository } from '../repositories/UserRepository'
 
+import { ServiceError } from '../..'
+
+const { APP_SECRET } = process.env
+
 async function createUser(name: string) {
   try {
     return await UserRepository.createUser(name)
@@ -9,39 +13,21 @@ async function createUser(name: string) {
     throw { 
       status: 500, 
       error: 'Internal server error', 
-      message_server: '!! Error creating user !!'
+      message_server: 'ERROR: Service create user'
     } as ServiceError
   }
 }
 
-async function createToken(user_id: IdMongo) {
+async function createToken(user_id: string) {
   try {
-    return sign({ user_id }, '123')
+    return sign({ user_id }, APP_SECRET)
   } catch (err) {
     throw { 
       status: 500, 
       error: 'Internal server error', 
-      message_server: '!! Error creating token !!'
+      message_server: 'ERROR: Service create token'
     } as ServiceError
   }
 }
 
-async function findAllUsersBut(user_id: IdMongo) {
-  try {
-    const documents = await UserRepository.findAllUsersBut(user_id)
-
-    return documents.map((document) => ({
-      id: document.id,
-      name: document.name,
-      isBot: document.isBot
-    }) as User)
-  } catch (err) {
-    throw { 
-      status: 500, 
-      error: 'Internal server error',
-      message_server: '!! Error fetching contacts !!'
-    } as ServiceError
-  }
-}
-
-export const UserService = { createUser, createToken, findAllUsersBut }
+export const UserService = { createUser, createToken }

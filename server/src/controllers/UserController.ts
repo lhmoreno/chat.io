@@ -1,37 +1,29 @@
 import { Request, Response } from 'express'
 
 import { UserService } from '../services/UserService'
-import { UserView } from '../views/UserView'
+import { utils } from '../validators/utils'
 
-import { isServiceError } from '../@types/VerifyType'
+async function createSession(req: Request, res: Response) {
+  const { name } = req.body
 
-async function create(req: Request, res: Response) {
-  const { name } = req.query
-  if (typeof(name) !== 'string') return res.status(400).json({ message: 'Name is required!' })
+  // Validators
+  if (typeof(name) !== 'string') return res.status(400).json({ error: 'Invalid name' })
+  if (name.length > 10) return res.status(400).json({ error: 'Name maximum length 10 characters' })
 
   try {
-    const token = await UserService.createUserAndToken(name)
+    // Services
+    const user = await UserService.createUser(name)
+    const token = await UserService.createToken(user._id)
 
-    return res.status(201).json({ token })
+    return res.status(200).json({ token })
   } catch (err) {
-    if (isServiceError(err)) return res.status(err.status).json({ message: err.message })
-
-    return res.status(500).json({ message: 'Internal server error' })
+    if (utils.isServiceError(err)) {
+      err.message_server && console.log(err.message_server)
+      return res.status(err.status).json({ error: err.error })
+    }
+    console.log(err)
+    return res.status(500).json({ error: 'Internal server error' })
   }
 }
 
-async function index(req: Request, res: Response) {
-  const user_id = req.user_id as string
-  try {
-    const documents = await UserService.findAllUsersBut(user_id)
-    const contacts = UserView.renderMany(documents)
-  
-    return res.status(200).json({ contacts })
-  } catch (err) {
-    if (isServiceError(err)) return res.status(err.status).json({ message: err.message })
-
-    return res.status(500).json({ message: 'Internal server error' })
-  }
-}
-
-export const UserController = { create, index }
+export const UserController = { createSession }
