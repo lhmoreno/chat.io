@@ -1,19 +1,35 @@
-import { createServer } from 'http'
+import express from 'express'
 import { connect } from 'mongoose'
 
-import { createExpress } from './servers/express'
-import { createIo } from './servers/io'
-// import { createClientSocket } from './__tests__/clientSocket'
+import { routes } from './routes'
 
-const expressServer = createExpress()
-const httpServer = createServer(expressServer)
-export const ioServer = createIo(httpServer)
+const { 
+  APP_PORT,
+  MONGO_ADMIN_USER,
+  MONGO_ADMIN_PASSWORD,
+  MONGO_HOST,
+  MONGO_PORT,
+  MONGO_NAME
+} = process.env
 
-connect('mongodb://admin:123@localhost:27017/chatio?authSource=admin')
-  .then(() => console.log('-- Database connected --'))
-  .catch(() => console.log('!! Database not connected !!'))
+const app = express()
 
-httpServer.listen(3333, () => {
-  console.log('-- Server running --')
-  // createClientSocket()
-})
+app.use(express.json())
+app.use(routes)
+
+console.log('INFO: MongoDB connecting...')
+
+connect(`mongodb://${MONGO_ADMIN_USER}:${MONGO_ADMIN_PASSWORD}@${MONGO_HOST}:${MONGO_PORT}/${MONGO_NAME}?authSource=admin`)
+
+  .then(() => {
+    console.log('LOG: MongoDB connected')
+    console.log('INFO: Starting server...')
+    app.listen(APP_PORT, () => {
+      console.log(`LOG: Running in http://localhost:${APP_PORT}`)
+    })
+  })
+
+  .catch((err) => {
+    console.log('ERROR: MongoDB not connected')
+    console.log(err)
+  })
