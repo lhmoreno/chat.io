@@ -22,7 +22,7 @@ async function createSession(req: Request, res: Response) {
       err.message_server && console.log(err.message_server)
       return res.status(err.status).json({ error: err.error })
     }
-    console.log(err)
+    
     return res.status(500).json({ error: 'Internal server error' })
   }
 }
