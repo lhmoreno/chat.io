@@ -24,4 +24,8 @@ async function findAllUsersBut(user_id: string) {
   return await UserModel.find({ _id: { $nin: [user_id] } }).lean()
 }
 
-export const UserRepository = { createUser, updateNameUser, findUser, findAllUsersBut }
+async function existsUser(user_id: string) {
+  return await UserModel.exists({ _id: user_id })
+}
+
+export const UserRepository = { createUser, updateNameUser, findUser, findAllUsersBut, existsUser }
