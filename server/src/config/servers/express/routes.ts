@@ -1,7 +1,7 @@
 import { Router } from 'express'
 
-import { UserController } from '../../controllers/UserController'
-import { ChatController } from '../../controllers/ChatController'
+import { UserController } from '../../../controllers/UserController'
+import { ChatController } from '../../../controllers/ChatController'
 
 const routes = Router()
 

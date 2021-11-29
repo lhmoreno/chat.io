@@ -9,10 +9,10 @@ export function createServerSocketIo(server: Server) {
   })
 
   socketio.on('connection', (socket) => {
-    console.log('+1 User') // Log
+    console.log('LOG: +1 User Io')
 
     socket.on('disconnect', () => {
-      console.log('-1 User') // Log
+      console.log('LOG: -1 User Io')
     })
   })
 

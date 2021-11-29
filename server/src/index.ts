@@ -1,8 +1,10 @@
 import { createServer } from 'http'
-import { connect } from 'mongoose'
 
-import { createServerExpress } from './servers/express'
-import { createServerSocketIo } from './servers/socketio'
+import { createServerExpress } from './config/servers/express'
+import { createServerSocketIo } from './config/servers/socketio'
+
+import { connectMongo } from './config/databases/mongo'
+import './config/databases/redis'
 
 const { 
   APP_PORT,
@@ -17,13 +19,15 @@ const serverExpress = createServerExpress()
 const httpServer = createServer(serverExpress)
 export const ioServer = createServerSocketIo(httpServer)
 
-console.log('INFO: MongoDB connecting...')
-
-connect(`mongodb://${MONGO_ADMIN_USER}:${MONGO_ADMIN_PASSWORD}@${MONGO_HOST}:${MONGO_PORT}/${MONGO_NAME}?authSource=admin`)
-
+connectMongo({
+  user: MONGO_ADMIN_USER,
+  password: MONGO_ADMIN_PASSWORD,
+  host: MONGO_HOST,
+  port: MONGO_PORT,
+  name: MONGO_NAME
+})
   .then(() => {
     console.log('LOG: MongoDB connected')
-    console.log('INFO: Starting server...')
     httpServer.listen(APP_PORT, () => {
       console.log(`LOG: Running in http://localhost:${APP_PORT}`)
     })
