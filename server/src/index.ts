@@ -1,7 +1,8 @@
-import express from 'express'
+import { createServer } from 'http'
 import { connect } from 'mongoose'
 
-import { routes } from './routes'
+import { createServerExpress } from './servers/express'
+import { createServerSocketIo } from './servers/socketio'
 
 const { 
   APP_PORT,
@@ -12,10 +13,9 @@ const {
   MONGO_NAME
 } = process.env
 
-const app = express()
-
-app.use(express.json())
-app.use(routes)
+const serverExpress = createServerExpress()
+const httpServer = createServer(serverExpress)
+export const ioServer = createServerSocketIo(httpServer)
 
 console.log('INFO: MongoDB connecting...')
 
@@ -24,7 +24,7 @@ connect(`mongodb://${MONGO_ADMIN_USER}:${MONGO_ADMIN_PASSWORD}@${MONGO_HOST}:${M
   .then(() => {
     console.log('LOG: MongoDB connected')
     console.log('INFO: Starting server...')
-    app.listen(APP_PORT, () => {
+    httpServer.listen(APP_PORT, () => {
       console.log(`LOG: Running in http://localhost:${APP_PORT}`)
     })
   })
