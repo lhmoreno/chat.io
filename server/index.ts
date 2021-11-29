@@ -41,6 +41,16 @@ export interface Chat {
   __v: number
 }
 
+export interface QueueMessages {
+  chat_id?: string
+  messages?: string[]
+}
+
+export interface QueueUser {
+  user_id?: string
+  chats: QueueMessages[]
+}
+
 // Service
 export interface ServiceError { 
   status: number, 
