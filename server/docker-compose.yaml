@@ -9,3 +9,11 @@ services:
     environment:
       MONGO_INITDB_ROOT_USERNAME: admin
       MONGO_INITDB_ROOT_PASSWORD: chat.io
+
+  redis:
+    container_name: redis_chatio
+    image: redis:6.2.6-alpine
+    ports:
+      - 6379:6379
+    command: redis-server
+      
