@@ -4,7 +4,7 @@ import { createServerExpress } from './config/servers/express'
 import { createServerSocketIo } from './config/servers/socketio'
 
 import { connectMongo } from './config/databases/mongo'
-import './config/databases/redis'
+import { redis } from './config/databases/redis'
 
 const { 
   APP_PORT,
@@ -28,8 +28,10 @@ connectMongo({
 })
   .then(() => {
     console.log('LOG: MongoDB connected')
-    httpServer.listen(APP_PORT, () => {
-      console.log(`LOG: Running in http://localhost:${APP_PORT}`)
+    redis.clear().finally(() => {
+      httpServer.listen(APP_PORT, () => {
+        console.log(`LOG: Running in http://localhost:${APP_PORT}`)
+      })
     })
   })
 
