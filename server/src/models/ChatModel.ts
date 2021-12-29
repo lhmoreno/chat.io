@@ -42,8 +42,7 @@ const ChatSchema = new Schema<Chat>({
         required: true
       }
     ],
-    required: true,
-    unique: true
+    required: true
   },
 
   messages: {
