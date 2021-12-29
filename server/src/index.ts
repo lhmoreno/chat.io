@@ -17,7 +17,7 @@ const {
 
 const serverExpress = createServerExpress()
 const httpServer = createServer(serverExpress)
-export const ioServer = createServerSocketIo(httpServer)
+export const serverIo = createServerSocketIo(httpServer)
 
 connectMongo({
   user: MONGO_ADMIN_USER,

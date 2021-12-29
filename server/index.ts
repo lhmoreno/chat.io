@@ -12,6 +12,12 @@ declare global {
   }
 }
 
+declare module 'socket.io/dist/socket' {
+  export interface Handshake {
+    user_id: string
+  }
+}
+
 // Database
 export interface User {
   _id: string

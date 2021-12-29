@@ -1,7 +1,9 @@
 import { UserRepository } from '../repositories/UserRepository'
 import { ChatRepository } from '../repositories/ChatRepository'
 
-import { ServiceError } from '../..'
+import { MessageStatus, ServiceError } from '../..'
+import { serverIo } from '..'
+import { redis } from '../config/databases/redis'
 
 interface CreateMessage {
   user_id: string
@@ -14,7 +16,24 @@ async function createMessageByUsersIds(user_id_1: string, user_id_2: string, mes
   try {
     const chat = await ChatRepository.findChatByUsersIds(user_id_1, user_id_2)
 
-    if (chat) return await ChatRepository.createMessageByChat(chat, message)
+    if (chat) {
+      const socket_id = await redis.get(user_id_2)
+
+      if (socket_id) {
+        const message_db = await ChatRepository.createMessageByChat(chat, { ...message, status: MessageStatus.received })
+        serverIo.to(String(socket_id)).emit('MESSAGE', {
+          message_id: message_db._id,
+          user_id: message_db.user_id,
+          text: message_db.text,
+          hour: message_db.hour,
+          status: message_db.status
+        })
+
+        return message_db
+      } else {
+        return await ChatRepository.createMessageByChat(chat, message)
+      }
+    }
   } catch (err) {
     throw { 
       status: 500, 
