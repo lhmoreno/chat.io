@@ -1,7 +1,7 @@
 import { Server } from 'http'
 import { Server as ServerIo } from 'socket.io'
 
-// import { auth } from '../../../middlewares/auth'
+import { auth } from '../../../middlewares/auth'
 import { redis } from '../../databases/redis'
 
 export function createServerSocketIo(server: Server) {
@@ -11,7 +11,7 @@ export function createServerSocketIo(server: Server) {
     }
   })
 
-  // socketio.use(auth.io)
+  socketio.use(auth.io)
 
   socketio.on('connection', async (socket) => {
     console.log('LOG: +1 User Io')
