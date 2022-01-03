@@ -10,11 +10,7 @@ const { APP_SECRET } = process.env
 
 async function createUser(name: string) {
   try {
-    const user = await UserRepository.createUser(name)
-    const _id = user._id as string
-    const __v = user.__v as number
-
-    return { _id, name, __v } as User
+    return await UserRepository.createUser(name)
   } catch (err) {
     throw { 
       status: 500, 
@@ -38,26 +34,21 @@ async function createToken(user_id: string) {
 
 async function updateNameUser(user_id: string, newName: string) {
   try {
-    const user = await UserRepository.updateNameUser(user_id, newName)
-
-    if (user) {
-      const __v = user.__v as number
-
-      return { _id: user_id, name: newName, __v } as User
+    return await UserRepository.updateNameUser(user_id, newName)
+  } catch (err) {
+    if (err === {}) {
+      throw { 
+        status: 400, 
+        error: 'Invalid user or name'
+      } as ServiceError
     }
 
-  } catch (err) {
     throw { 
       status: 500, 
       error: 'Internal server error', 
       message_server: 'ERROR: Service update name user'
     } as ServiceError
   }
-
-  throw { 
-    status: 400, 
-    error: 'Invalid user or name'
-  } as ServiceError
 }
 
 async function findUser(user_id: string) {
@@ -91,14 +82,9 @@ async function findUser(user_id: string) {
     throw { 
       status: 500, 
       error: 'Internal server error', 
-      message_server: 'ERROR: Service create token'
+      message_server: 'ERROR: Service find user'
     } as ServiceError
   }
-
-  throw { 
-    status: 400, 
-    error: 'Invalid user'
-  } as ServiceError
 }
 
 async function findUserIdByToken(token: string) {

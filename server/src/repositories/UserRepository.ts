@@ -58,18 +58,25 @@ async function updateUnreadByUsersIds(user_id: string, user_id_unread: string) {
   return true
 }
 
+
 async function updateNameUser(user_id: string, newName: string) {
-  const user = await UserModel.findById(user_id).lean()
-  if (!user) return null
+  const document = await UserModel.findByIdAndUpdate(user_id, { name: newName })
+  if (!document) throw {}
 
-  const document = await UserModel.findByIdAndUpdate(user_id, { ...user, name: newName })
-  if (!document) return null
+  const user = document.toObject()
 
-  return document.toObject()
+  const _id = user._id as string
+  const unread = user.unread
+  const __v = user.__v as number
+
+  return { _id, name: newName, unread, __v } as User
 }
 
 async function findUser(user_id: string) {
-  return await UserModel.findById(user_id).lean()
+  const user = await UserModel.findById(user_id).lean()
+  if (!user) throw {}
+
+  return user
 }
 
 async function findAllUsersBut(user_id: string) {
@@ -80,4 +87,4 @@ async function existsUser(user_id: string) {
   return await UserModel.exists({ _id: user_id })
 }
 
-export const UserRepository = { createUser, updateNameUser, findUser, findAllUsersBut, existsUser }
+export const UserRepository = { createUser, createUnreadByUser, updateUnreadByUsersIds, updateNameUser, findUser, findAllUsersBut, existsUser }
