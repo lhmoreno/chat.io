@@ -18,6 +18,11 @@ declare module 'socket.io/dist/socket' {
   }
 }
 
+export interface StaticUser {
+  socket_id: string
+  chat_active?: string
+}
+
 // Database
 export interface UnreadMessage {
   user_id: string

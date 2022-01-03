@@ -1,7 +1,7 @@
 import { UserRepository } from '../repositories/UserRepository'
 import { ChatRepository } from '../repositories/ChatRepository'
 
-import { Message, MessageStatus, ServiceError } from '../..'
+import { Message, MessageStatus, ServiceError, StaticUser } from '../..'
 import { serverIo } from '..'
 import { redis } from '../config/databases/redis'
 interface CreateMessage {
@@ -16,22 +16,36 @@ async function createMessageByUsersIds(user_id_1: string, user_id_2: string, mes
     const chat = await ChatRepository.findChatByUsersIds(user_id_1, user_id_2)
 
     if (chat) {
-      const socket_id = await redis.get(user_id_2)
+      const data = await redis.get(user_id_2) as string | undefined
+      
+      if (data) {
+        const { socket_id, chat_active } = JSON.parse(data) as StaticUser
+        if (chat_active === String(chat._id)) {
+          const message_db = await ChatRepository.createMessageByChat(chat, { ...message, status: MessageStatus.viewed })
+          serverIo.to(String(socket_id)).emit('MESSAGE', {
+            message_id: message_db._id,
+            user_id: message_db.user_id,
+            text: message_db.text,
+            hour: message_db.hour,
+            status: message_db.status
+          })
+  
+          return message_db
+        } else {
+          const message_db = await ChatRepository.createMessageByChat(chat, { ...message, status: MessageStatus.received })
+          serverIo.to(String(socket_id)).emit('MESSAGE', {
+            message_id: message_db._id,
+            user_id: message_db.user_id,
+            text: message_db.text,
+            hour: message_db.hour,
+            status: message_db.status
+          })
 
-      if (socket_id) {
-        const message_db = await ChatRepository.createMessageByChat(chat, { ...message, status: MessageStatus.received })
-        serverIo.to(String(socket_id)).emit('MESSAGE', {
-          message_id: message_db._id,
-          user_id: message_db.user_id,
-          text: message_db.text,
-          hour: message_db.hour,
-          status: message_db.status
-        })
-
-        const user = await UserRepository.findUser(user_id_2) 
-        await UserRepository.createUnreadByUser(user, user_id_1)
-
-        return message_db
+          const user = await UserRepository.findUser(user_id_2) 
+          await UserRepository.createUnreadByUser(user, user_id_1)
+  
+          return message_db
+        }
       } else {
         const newMessage = await ChatRepository.createMessageByChat(chat, message)
 
@@ -64,9 +78,10 @@ async function createMessageByUsersIds(user_id_1: string, user_id_2: string, mes
 
   // Create a chat
   try {
-    const socket_id = await redis.get(user_id_2)
+    const data = await redis.get(user_id_2) as string | undefined
     
-    if (socket_id) {
+    if (data) {
+      const { socket_id } = JSON.parse(data) as StaticUser
       const newChat = await ChatRepository.createChat(user_id_1, user_id_2, { ...message, status: MessageStatus.received})
 
       serverIo.to(String(socket_id)).emit('MESSAGE', {
@@ -103,6 +118,14 @@ async function findMessagesByUsersIds(user_id_1: string, user_id_2: string) {
     const chat = await ChatRepository.findChatByUsersIds(user_id_1, user_id_2)
 
     if (chat) {
+      const data = await redis.get(user_id_1) as string | undefined
+      if (data) {
+        const newData = JSON.parse(data) as StaticUser
+        newData.chat_active = chat._id
+        await redis.set(user_id_1, JSON.stringify(newData))
+      }
+
+
       const unreadMessages: Message[] = chat.messages.filter(({ status, user_id }) => status !== MessageStatus.viewed && user_id === user_id_2)
   
       if (unreadMessages.length === 0) return chat.messages
@@ -123,7 +146,6 @@ async function findMessagesByUsersIds(user_id_1: string, user_id_2: string) {
       return newChat.messages
     }
   } catch (err) {
-    console.log(err)
     if (err && typeof(err) === 'object' && Object.keys(err).length === 0) {
       throw { 
         status: 400, 
