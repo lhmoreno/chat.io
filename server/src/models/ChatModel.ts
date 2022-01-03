@@ -4,8 +4,7 @@ import { Message, MessageStatus, Chat } from '../..'
 
 const MessageSchema = new Schema<Message>({
   user_id: {
-    type: Schema.Types.ObjectId,
-    ref: 'User',
+    type: String,
     required: true
   },
 
@@ -29,19 +28,7 @@ const MessageSchema = new Schema<Message>({
 
 const ChatSchema = new Schema<Chat>({
   users: {
-    type: [
-      {
-        type: Schema.Types.ObjectId,
-        ref: 'User',
-        required: true
-
-      }, 
-      {
-        type: Schema.Types.ObjectId,
-        ref: 'User',
-        required: true
-      }
-    ],
+    type: [String, String],
     required: true
   },
 
