@@ -5,6 +5,19 @@ import { UserService } from '../services/UserService'
 import { ChatService } from '../services/ChatService'
 import { ChatView } from '../views/ChatView'
 
+function formatAMPM (date: Date) {
+  let hours = date.getUTCHours() - 3
+  const minutes = date.getUTCMinutes()
+  const ampm = hours >= 12 ? 'PM' : 'AM'
+
+  hours = hours % 12
+  hours = hours ? hours : 12
+  const strMinutes = minutes.toString().padStart(2, '0')
+  const strTime = hours + ':' + strMinutes + ' ' + ampm
+
+  return strTime
+}
+
 async function createMessage(req: Request, res: Response) {
   const token = req.headers.authorization
   const { user_id_2 } = req.params
@@ -17,10 +30,11 @@ async function createMessage(req: Request, res: Response) {
   try {
     // Services
     const user_id_1 = await UserService.findUserIdByToken(token.split(' ')[1])
+    const date = new Date()
     const newMessage = await ChatService.createMessageByUsersIds(user_id_1, user_id_2, {
       user_id: user_id_1,
       text: message_send,
-      hour: '12:37pm'
+      hour: formatAMPM(date)
     })
 
     const message = ChatView.renderMessage(newMessage)
