@@ -19,9 +19,15 @@ declare module 'socket.io/dist/socket' {
 }
 
 // Database
+export interface UnreadMessage {
+  user_id: string
+  count: number
+}
+
 export interface User {
   _id: string
   name: string
+  unread: UnreadMessage[]
   isBot?: boolean
   __v: number
 }
@@ -34,7 +40,7 @@ export enum MessageStatus {
 
 export interface Message {
   _id: string
-  user_id?: string
+  user_id: string
   text: string
   hour: string
   status: MessageStatus
@@ -42,19 +48,9 @@ export interface Message {
 
 export interface Chat {
   _id: string
-  users: [string | undefined, string | undefined]
+  users: [string, string]
   messages: Message[]
   __v: number
-}
-
-export interface QueueMessages {
-  chat_id?: string
-  messages?: string[]
-}
-
-export interface QueueUser {
-  user_id?: string
-  chats: QueueMessages[]
 }
 
 // Service

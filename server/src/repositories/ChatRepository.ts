@@ -25,6 +25,12 @@ async function createChat(user_id_1: string, user_id_2: string, message: CreateM
   return { _id, users, messages, __v } as Chat
 }
 
+async function updateChatStatus(newChat: Chat) {
+  await ChatModel.updateOne({ _id: newChat._id }, newChat)
+
+  return newChat
+}
+
 async function createMessageByChat(chat: Chat, newMessage: CreateMessage) {
   const document = new ChatModel({ 
     _id: chat._id,
@@ -42,10 +48,12 @@ async function createMessageByChat(chat: Chat, newMessage: CreateMessage) {
 }
 
 async function findChatByUsersIds(user_id_1: string, user_id_2: string) {
-  const chat = await ChatModel.findOne({ users: [user_id_1, user_id_2] }).lean()
-  if (!chat) return null
+  const chats = await ChatModel.find({ users: user_id_1 }).lean()
+  const filteredChats = chats.filter(({ users }) => users.includes(user_id_2))
 
-  return chat
+  if (filteredChats.length === 0) return null
+
+  return filteredChats[0]
 }
 
-export const ChatRepository = { createChat, createMessageByChat, findChatByUsersIds }
+export const ChatRepository = { createChat, updateChatStatus, createMessageByChat, findChatByUsersIds }

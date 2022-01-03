@@ -1,10 +1,28 @@
 import { Schema, model } from 'mongoose'
 
-import { User } from '../..'
+import { UnreadMessage, User } from '../..'
+
+const Unread = new Schema<UnreadMessage>({
+  user_id: {
+    type: String,
+    required: true
+  },
+
+  count: {
+    type: Number,
+    required: true,
+    default: 0
+  }
+}, { _id: false })
 
 const UserSchema = new Schema<User>({
   name: {
     type: String,
+    required: true
+  },
+
+  unread: {
+    type: [Unread],
     required: true
   },
 

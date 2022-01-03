@@ -3,7 +3,8 @@ import { sign, verify } from 'jsonwebtoken'
 import { UserRepository } from '../repositories/UserRepository'
 import { utils } from '../validators/utils'
 
-import { ServiceError, User } from '../..'
+import { MessageStatus, ServiceError } from '../..'
+import { ChatRepository } from '../repositories/ChatRepository'
 
 const { APP_SECRET } = process.env
 
@@ -63,7 +64,29 @@ async function findUser(user_id: string) {
   try {
     const user = await UserRepository.findUser(user_id)
 
-    if (user) return user
+    // Status message received
+    const chats = user.unread.filter((unread) => unread.count > 0)
+
+    const promises = chats.map(async (unread) => {
+      const chat = await ChatRepository.findChatByUsersIds(user_id, unread.user_id)
+
+      if (chat) {
+        const newChat = chat
+        chat.messages.forEach((message, index) => {
+          if (message.status === MessageStatus.sent) {
+            return newChat.messages[index] = { ...message, status: MessageStatus.received }
+          }
+  
+          return newChat.messages[index] = message
+        })
+  
+        await ChatRepository.updateChatStatus(newChat)
+      }
+    })
+
+    await Promise.all(promises)
+
+    return user
   } catch (err) {
     throw { 
       status: 500, 

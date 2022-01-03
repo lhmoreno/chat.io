@@ -1,9 +1,61 @@
+import { User } from '../..'
 import { UserModel } from '../models/UserModel'
 
 async function createUser(name: string) {
-  const document = await UserModel.create({ name })
+  const user = new UserModel({
+    name,
+    unread: []
+  })
+  
+  await user.save()
 
-  return document.toObject()
+  const _id = user._id as string
+  const __v = user.__v as number
+
+  return { _id, name, unread: [], __v } as User
+}
+
+async function createUnreadByUser(user: User, user_id_unread: string) {
+  const newUnread = user.unread
+  const index = newUnread.findIndex(({ user_id }) => user_id === user_id_unread)
+
+  if (index === -1) {
+    newUnread.push({
+      user_id: user_id_unread,
+      count: 1
+    })
+  } else {
+    newUnread[index].count += 1
+  }
+
+
+  const document = new UserModel({ 
+    _id: user._id,
+    unread: newUnread,
+    __v: user.__v
+  })
+
+  await UserModel.updateOne({ _id: user._id }, document)
+
+  return newUnread
+}
+
+async function updateUnreadByUsersIds(user_id: string, user_id_unread: string) {
+  const user = await findUser(user_id)
+  const index = user.unread.findIndex((unread) => unread.user_id === user_id_unread)
+  
+  if (index === -1 || user.unread[index].count === 0) return false
+
+  const newUnread = user.unread
+  newUnread[index].count = 0
+
+  await UserModel.updateOne({ _id: user._id }, { 
+    _id: user._id,
+    unread: newUnread,
+    __v: user.__v
+  })
+
+  return true
 }
 
 async function updateNameUser(user_id: string, newName: string) {
