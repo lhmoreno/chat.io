@@ -13,4 +13,16 @@ function renderMany(users: User[]) {
   return users.map((user) => render(user))
 }
 
-export const UserView = { render, renderMany }
+function renderContact(user: User) {
+  return {
+    id: user._id,
+    name: user.name,
+    isBot: user.isBot
+  }
+}
+
+function renderManyContacts(users: User[]) {
+  return users.map((user) => renderContact(user))
+}
+
+export const UserView = { render, renderMany, renderManyContacts }

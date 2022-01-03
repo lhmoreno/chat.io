@@ -89,7 +89,7 @@ async function indexContacts(req: Request, res: Response) {
     const user_id = await UserService.findUserIdByToken(token.split(' ')[1])
     const users_db = await UserService.findAllUsersBut(user_id)
 
-    const contacts = UserView.renderMany(users_db)
+    const contacts = UserView.renderManyContacts(users_db)
 
     return res.status(200).json({ contacts })
   } catch (err) {
