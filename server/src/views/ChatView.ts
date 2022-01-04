@@ -1,4 +1,4 @@
-import { Message } from '../..'
+import { Message } from '../types'
 
 function renderMessage(message: Message) {
   return {

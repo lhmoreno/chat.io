@@ -1,4 +1,4 @@
-import { User } from '../..'
+import { User } from '../types'
 import { UserModel } from '../models/UserModel'
 
 async function createUser(name: string) {

@@ -1,7 +1,7 @@
 import { UserRepository } from '../repositories/UserRepository'
 import { ChatRepository } from '../repositories/ChatRepository'
 
-import { Message, MessageStatus, ServiceError, StaticUser } from '../..'
+import { Message, MessageStatus, ServiceError, StaticUser } from '../types'
 import { serverIo } from '..'
 import { redis } from '../config/databases/redis'
 interface CreateMessage {

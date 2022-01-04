@@ -1,6 +1,6 @@
 import { Schema, model } from 'mongoose'
 
-import { Message, MessageStatus, Chat } from '../..'
+import { Message, MessageStatus, Chat } from '../types'
 
 const MessageSchema = new Schema<Message>({
   user_id: {

@@ -1,6 +1,6 @@
 import { ChatModel } from '../models/ChatModel'
 
-import { Chat, MessageStatus } from '../..'
+import { Chat, MessageStatus } from '../types'
 
 interface CreateMessage {
   user_id: string

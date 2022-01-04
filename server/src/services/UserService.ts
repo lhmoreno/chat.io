@@ -3,7 +3,7 @@ import { sign, verify } from 'jsonwebtoken'
 import { UserRepository } from '../repositories/UserRepository'
 import { utils } from '../validators/utils'
 
-import { MessageStatus, ServiceError } from '../..'
+import { MessageStatus, ServiceError } from '../types'
 import { ChatRepository } from '../repositories/ChatRepository'
 
 const { APP_SECRET } = process.env

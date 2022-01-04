@@ -1,4 +1,4 @@
-import { StaticUser } from '../../../..'
+import { StaticUser } from '../../../types'
 import { Server } from 'http'
 import { Server as ServerIo } from 'socket.io'
 

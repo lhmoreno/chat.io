@@ -1,6 +1,6 @@
 import { Schema, model } from 'mongoose'
 
-import { UnreadMessage, User } from '../..'
+import { UnreadMessage, User } from '../types'
 
 const Unread = new Schema<UnreadMessage>({
   user_id: {

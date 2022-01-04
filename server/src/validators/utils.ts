@@ -1,4 +1,4 @@
-import { ServiceError, JwtPayload } from '../..'
+import { ServiceError, JwtPayload } from '../types'
 import { JsonWebTokenError } from 'jsonwebtoken'
 
 function isServiceError(err: any): err is ServiceError {
