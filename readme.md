@@ -1,3 +1,3 @@
 # Chat.io
 
-## Server in development 🚧
+## Implementation in progress 🚧
