@@ -6,6 +6,7 @@
     "dev": "tsnd -r dotenv/config src dotenv_config_path=.dev.env"
   },
   "dependencies": {
+    "cors": "^2.8.5",
     "dotenv": "^10.0.0",
     "express": "^4.17.1",
     "ioredis": "^4.28.1",
